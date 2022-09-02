@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import emailjs from '@emailjs/browser';
+import ClipLoader from "react-spinners/ClipLoader";
 
 // Notion Style Profile SVG
 import ProfileCartoonImage from '../images/ProfileCartoonImage.svg';
@@ -37,14 +38,41 @@ import CSSIcon from '../images/CSSIcon.svg';
 
 // External Libraries
 import {useRef} from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+// Black Spinner
+const blackOverride = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "black",
+  height: "20px",
+  width: "20px"
+};
 
 export default function HomePage() {
     const contactRef = useRef();
     const projectsRef = useRef();
     const formRef = useRef();
+    const { state } = useLocation();
+    const navigate = useNavigate();
     const scrollToProject = () => projectsRef.current.scrollIntoView({behavior: 'smooth', block:'center', inline: 'center'});
     const scrollToContact = () => contactRef.current.scrollIntoView({behavior: 'smooth', block:'center', inline: 'center'});
-    
+    const [loading, setLoading] = useState();
+
+    useEffect(() => {
+      if (state) {
+        if (state.action === 'projects') projectsRef.current.scrollIntoView({behavior: 'smooth', block:'center', inline: 'center'});
+        if (state.action === 'contact') contactRef.current.scrollIntoView({behavior: 'smooth', block:'center', inline: 'center'});
+      }
+    }, [state]);
+
+    const activateLoader = () => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 800);
+    }
+
     const sendEmail = (e) => {
       e.preventDefault();
   
@@ -64,7 +92,7 @@ export default function HomePage() {
       <div className="portfolio-nav-title">Robin Nguyen</div>
     </div>
     <div className="portfolio-nav-links-section">
-      <div className="portfolio-nav-links">About</div>
+      <div onClick={() => navigate('/about')} className="portfolio-nav-links">About</div>
       <div className="portfolio-nav-links" onClick={scrollToProject}>Projects</div>
       <div className="portfolio-nav-hire-me-button" onClick={scrollToContact}>Let's Talk</div>
     </div>
@@ -91,16 +119,18 @@ export default function HomePage() {
       />
     </div>
     <div className="portfolio-hero-center-links">
-      <div className="portfolio-hero-center-link-div">
+      <a href={`/RobinNguyenResume.pdf`} download onClick={activateLoader} className="portfolio-hero-center-link-div">
+      {loading ? <ClipLoader color={`#000000`} loading={loading} cssOverride={blackOverride} size={150} />:
         <img
           src={ResumeIcon}
           loading="lazy"
           alt=""
           className="portfolio-hero-image-link"
         />
+        }
         <div className="portfolio-hero-center-link">Resume</div>
-      </div>
-      <a href={`https://www.linkedin.com/in/robinnguyenk/`} className="portfolio-hero-center-link-div">
+      </a>
+      <a href={`https://www.linkedin.com/in/robinnguyenk/`} onClick={activateLoader} className="portfolio-hero-center-link-div">
         <img
           src={LinkedInIcon}
           loading="lazy"
@@ -159,15 +189,15 @@ export default function HomePage() {
             <br />
           </div>
           <div className="portfolio-project-info-links">
-            <div className="portfolio-project-button">
+            <a href={`http://bobarealm.com/`} className="portfolio-project-button">
               <img
                 src={LinkIcon}
                 loading="lazy"
                 alt=""
                 className="portfolio-project-github-link"
               />
-              <a href={`http://bobarealm.com/`} className="portfolio-project-link">Website</a>
-            </div>
+              <div className="portfolio-project-link">Website</div>
+            </a>
           </div>
         </div>
       </div>
@@ -209,24 +239,24 @@ export default function HomePage() {
             <br />
           </div>
           <div className="portfolio-project-info-links">
-            <div className="portfolio-project-button">
+            <a href={`https://github.com/RobKNguyen/Pathfinder`} className="portfolio-project-button">
               <img
                 src={GithubIcon}
                 loading="lazy"
                 alt=""
                 className="portfolio-project-github-link"
               />
-              <a href={`https://github.com/RobKNguyen/Pathfinder`} className="portfolio-project-link">GitHub</a>
-            </div>
-            <div className="portfolio-project-button">
+              <div className="portfolio-project-link">GitHub</div>
+            </a>
+            <a href={`https://pathfinder-349020.uw.r.appspot.com/`} className="portfolio-project-button">
               <img
                 src={LinkIcon}
                 loading="lazy"
                 alt=""
                 className="portfolio-project-github-link"
               />
-              <a href={`https://pathfinder-349020.uw.r.appspot.com/`} className="portfolio-project-link">Website</a>
-            </div>
+              <div className="portfolio-project-link">Website</div>
+            </a>
           </div>
         </div>
       </div>
@@ -263,7 +293,7 @@ export default function HomePage() {
             <br />
           </div>
           <div className="portfolio-project-info-links">
-            <div className="portfolio-project-button">
+            {/* <div className="portfolio-project-button">
               <img
                 src={GithubIcon}
                 loading="lazy"
@@ -271,8 +301,8 @@ export default function HomePage() {
                 className="portfolio-project-github-link"
               />
               <div className="portfolio-project-link">GitHub</div>
-            </div>
-            <div className="portfolio-project-button">
+            </div> */}
+            <a href={`https://recipechamber.netlify.app/index.html`}  className="portfolio-project-button">
               <img
                 src={LinkIcon}
                 loading="lazy"
@@ -280,7 +310,7 @@ export default function HomePage() {
                 className="portfolio-project-github-link"
               />
               <div className="portfolio-project-link">Website</div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -501,7 +531,7 @@ export default function HomePage() {
           type="submit"
           defaultValue=""
           data-wait="Please wait..."
-          className="portfolio-contact-submit-btn w-button"
+          className="portfolio-contact-submit-btn"
         />
       </div>
       <div className="w-form-done">
@@ -515,17 +545,14 @@ export default function HomePage() {
   <div className="portfolio-appreciation-section">
     <h1 className="portfolio-appreciation-header">A Sincere Thank You!</h1>
     <div className="portfolio-appreciation-text">
-      You made it to the end of my portfolio. Thank you so much for taking the
-      time out of your day to consider me! I am always trying to improve so
-      please leave feedback if you'd like. I hope that you like what you see,
-      and that we can potentially work together in the future!
+      You made it to the end of my portfolio. I hope that we can work together in the future and that you've liked my work. I am open to feedback and would greatly appreciate any opportunities you see as fit for me!
       <br />
       <br />
       <br />
       Feel free to reach out to me at any of the links below!
     </div>
     <div className="portfolio-footer-links">
-      <div className="portfolio-hero-center-link-div">
+      <a href={`/RobinNguyenResume.pdf`} download className="portfolio-hero-center-link-div">
         <img
           src={ResumeIcon}
           loading="lazy"
@@ -533,7 +560,7 @@ export default function HomePage() {
           className="portfolio-hero-image-link"
         />
         <div className="portfolio-hero-center-link">Resume</div>
-      </div>
+      </a>
       <a href={`https://www.linkedin.com/in/robinnguyenk/`} className="portfolio-hero-center-link-div">
         <img
           src={LinkedInIcon}

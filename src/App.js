@@ -1,20 +1,26 @@
 import React from 'react';
 import HomePage from './components/HomePage';
+import AboutPage from './components/AboutPage';
 import './css/normalize.css';
 import './css/portfolio.css';
 import './css/webflow.css';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
+  Routes,
+  Route
 } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <HomePage />
-    </div>
+    
+      <Router>
+        <div className="App">
+        <Routes>
+          <Route path="/" element={<HomePage />}/>
+          <Route path="/about" exact element={<AboutPage />}/>
+        </Routes>
+        </div>
+      </Router>
   );
 }
 

@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 export default function AboutPage() {
+    const navigate = useNavigate();
     return (
         <div className="portfolio-body">
             <div className="portfolio-page-container wf-section">
@@ -7,10 +10,9 @@ export default function AboutPage() {
                     <div className="portfolio-nav-title">Robin Nguyen</div>
                 </div>
                 <div className="portfolio-nav-links-section">
-                    <div className="portfolio-nav-links">About</div>
-                    <div className="portfolio-nav-links">Projects</div>
-                    <div className="portfolio-nav-links">Blog</div>
-                    <div className="portfolio-nav-hire-me-button">Let's Talk</div>
+                    <div onClick={() => navigate('/')} className="portfolio-nav-links">Home</div>
+                    <div onClick={() => navigate('/', {state: {action: 'projects'}})} className="portfolio-nav-links">Projects</div>
+                    <div onClick={() => navigate('/', {state: {action: 'contact'}})} className="portfolio-nav-hire-me-button">Let's Talk</div>
                 </div>
                 </div>
                 <div className="portfolio-page-about-section">
