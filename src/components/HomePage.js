@@ -82,6 +82,7 @@ export default function HomePage() {
         }, (error) => {
             console.log(error.text);
         });
+      formRef.current.reset();
     };
 
     return (
@@ -130,7 +131,7 @@ export default function HomePage() {
         }
         <div className="portfolio-hero-center-link">Resume</div>
       </a>
-      <a href={`https://www.linkedin.com/in/robinnguyenk/`} onClick={activateLoader} className="portfolio-hero-center-link-div">
+      <a href={`https://www.linkedin.com/in/robinnguyenk/`} className="portfolio-hero-center-link-div">
         <img
           src={LinkedInIcon}
           loading="lazy"
